@@ -1,7 +1,3 @@
-import random
-
-lst = [random.randint(1, 40) for i in range(10)]
-
-
-print(lst)
-print(list(filter(lambda b: 10 < b < 20, lst)))
+b = [66, 90, 68, 59, 76, 60, 88, 74, 81, 65]
+res = list(filter(lambda s: s < 75, b))
+print(res)
