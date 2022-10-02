@@ -1,12 +1,25 @@
-import re
+class Person:
+    def __init__(self, name, old):
+        self.__name = name
+        self.__old = old
 
-s = "Я ищу совпадения в 2021 года. И я из найду в 2 счёта"
-reg = r'([0-9]+)\s(\D+)'
-print(re.search(reg, s).group())
-# m = re.search(reg, s)
-# print(m[0])
-# print(m[1])
-# print(m[2])
-# print(re.findall(reg, s))
-print(re.search(reg, s).group(1))
-print(re.search(reg, s).group(2))
+    @property
+    def name(selfself):
+        return self.__name
+
+    @name.setter
+    def name(selfself,n):
+
+
+
+
+    @property
+    def old(selfself):
+        return self.__old
+
+p1 = Person('Irina', 26)
+print(p1.name)
+p1.name='Igor'
+del p1.name
+
+print(p1.__dict__)
