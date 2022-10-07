@@ -1,29 +1,27 @@
 class Converting:
     def __init__(self, a=0):
-        self.__kilograms = 0
-        self.__kilograms = a
+        self.__killograms = a
 
-    def __check_kilograms_int_float(s):
-        if not isinstance(s, int):
+    @property
+    def c__killograms(self):
+        return self.__killograms
+
+    @c__killograms.setter
+    def c__killograms(self, a):
+        if isinstance(a, (int, float)):
+            self.__killograms = a
+        else:
             print('Данные должны быть числом')
-            return False
-        return True
-
-    def set_kilograms(self, a):
-        if Converting.__check_kilograms_int_float(a):
-            self.__kilograms = a
 
     def convert(self):
-        c = self.__kilograms * 2.2046
-        print(f'{self.__kilograms} кг => {c:.3f} фунтов')
+        c = self.__killograms * 2.2046
+        return c
 
-
-# print(Converting.convert(12))
 
 c1 = Converting(12)
-c1.convert()
-c2 = Converting()
-c2.set_kilograms(41)
-c2.convert()
+print(c1.c__killograms, "кг => ", end="")
+print(f'{c1.convert():.2f} фунтов')
 
-
+c1.c__killograms = 41
+print(c1.c__killograms, "кг => ", end="")
+print(f'{c1.convert():.3f} фунтов')
