@@ -8,20 +8,22 @@ class Student:
         self.name = name
         self.notebook = self.Notebook()
 
+    def show(self):
+        print(self.name, end='')
+        self.notebook.show()
+
     class Notebook:
-        def model(self):
-            return "HP"
+        def __init__(self):
+            self.model = "HP"
+            self.ram = "i7"
+            self.cpy = "16"
 
-        def cpy(self):
-            return "i7"
-
-        def ram(self):
-            return "16"
+        def show(self):
+            print(f' => {self.model}, {self.cpy}, {self.ram}')
 
 
 s1 = Student('Roman')
-my_notebook = s1.notebook
-print(f'{s1.name} => {my_notebook.model()}, {my_notebook.cpy()}, {my_notebook.ram()}')
 s2 = Student('Vladimir')
-my_notebook = s2.notebook
-print(f'{s1.name} => {my_notebook.model()}, {my_notebook.cpy()}, {my_notebook.ram()}')
+
+s1.show()
+s2.show()
