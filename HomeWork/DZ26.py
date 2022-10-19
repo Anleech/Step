@@ -64,8 +64,25 @@ class Clock:
 
         return "Неверный ключ"
 
+    def __setitem__(self, key, value):
+        if not isinstance(key, str):
+            raise ValueError("Ключ должен быть строкой")
+
+        s = self.sec % 60
+        m = (self.sec // 60) % 60
+        h = (self.sec // 3600) % 24
+
+        if key == "hour":
+            self.sec = s + 60 * m + value * 3600
+        elif key == "min":
+            self.sec = s + 60 * value + h * 3600
+        elif key == "sec":
+            self.sec = value + 60 * m + h * 3600
+
+        return "Неверный ключ"
+
 
 c1 = Clock(80000)
 print(c1.get_format_time())
-с1["hour"] = 12
+c1["hour"] = 11
 print(c1["hour"], c1["min"], c1["sec"])
