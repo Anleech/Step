@@ -86,3 +86,7 @@ c1 = Clock(80000)
 print(c1.get_format_time())
 c1["hour"] = 11
 print(c1["hour"], c1["min"], c1["sec"])
+
+
+
+
