@@ -1,71 +1,22 @@
-class Clock:
-    __DAY = 86400
-
-    def __init__(self, sec: int):
-        if not isinstance(sec, int):
-            raise ValueError("Секунды должны быть целым числом")
-
-        self.sec = sec % self.__DAY
-
-    def __add__(self, other):
-        if not isinstance(other, Clock):
-            raise ArithmeticError("Правый операнд должен быть типом данных Clock")
-        return Clock(self.sec + other.sec)
-
-    def __sub__(self, other):
-        if not isinstance(other, Clock):
-            raise ArithmeticError("Правый операнд должен быть типом данных Clock")
-        return Clock(self.sec - other.sec)
-
-    def __mul__(self, other):
-        if not isinstance(other, Clock):
-            raise ArithmeticError()
-        return Clock(self.sec * other.sec)
-
-    def __floordiv__(self, other):
-        if not isinstance(other, Clock):
-            raise ArithmeticError()
-        return Clock(self.sec // other.sec)
-
-    def __mod__(self, other):
-        if not isinstance(other, Clock):
-            raise ArithmeticError()
-        return Clock(self.sec % other.sec)
-
-    def __eq__(self, other):
-        return self.sec == other.sec
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __gt__(self, other):
-        return self.sec > other.sec
-
-    def get_format_time(self):
-        s = self.sec % 60  # секунды
-        m = (self.sec // 60) % 60  # минуты
-        h = (self.sec // 3600) % 24  # часы
-        return f'{Clock.__get_form(h)}:{Clock.__get_form(m)}:{Clock.__get_form(s)}'
-
-    @staticmethod
-    def __get_form(x):
-        return str(x) if x > 9 else "0" + str(x)
-
-    def __getitem__(self, item):
-        if not isinstance(item, str):
-            raise ValueError("Ключ должен быть строкой")
-
-        if item == "hour":
-            return (self.sec // 3600) % 24
-        elif item == "min":
-            return (self.sec // 60) % 60
-        elif item == "sec":
-            return self.sec % 60
-
-        return "Неверный ключ"
+# x = 0  # Определить переменную цикла
+a = 11
+b = 6
+# for i in range(b):
+#     for j in range(0, a - i):
+#         print(end=" ")
+#     for k in range(a - i, a+1):
+#         print("*", end="0")
+#
+#     print()
 
 
-c1 = Clock(80000)
-print(c1.get_format_time())
-с1["hour"] = 12
-print(c1["hour"], c1["min"], c1["sec"])
+# x=6
+# for i in range(x):
+#     print('%s%s' % ('=' * (x-i-1), '*' * (i*2+1)))
+
+space = b - 1
+sign = 1
+while space > -1:
+    print(' ' * space + '*' * sign)
+    sign += 2
+    space -= 1
