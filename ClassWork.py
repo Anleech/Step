@@ -1,46 +1,64 @@
-class Integer:
-    @classmethod
-    def verify_coords(cls, coord):
-        if not isinstance(coord, int):
-            raise TypeError(f"Координата {coord} должна быть числом")
 
-    def __set_name__(self, owner, name):
-        self.name = "_" + name
+class Person:
 
-    def __get__(self, instance, owner):
-        # return instance.__dict__[self.name]
-        return getattr(instance, self.name)
+    def __init__(self, name, age):
+        self.name = name
+        self.__age = age
 
-    def __set__(self, instance, value):
-        self.verify_coords(value)
-        # instance.__dict__[self.name] = value
-        setattr(instance, self.name, value)
+    def print_info(self):
+        print(f'Name: {self.name}, Age: {self.__age}')
 
+    # def get_age(self):
+    #     return self.__age
+    #
+    # def set_age(self, value):
+    #     if value in range(1, 101):
+    #         self.__age = value
+    #     else:
+    #         print('Wrong age')
 
-class Point3d:
-    x = Integer()
-    y = Integer()
-    z = Integer()
+    @property
+    def age(self):
+        return self.__age
 
-    def __init__(self, a, b, c):
-        self.__ = a
-        self.y = b
-        self.z = c
-
-    def existence(self):
-        if (self.__a + self.__b > self.__c) and (self.__a + self.__c > self.__b) and (self.__b + self.__c > self.__a):
-            return "существует"
+    @age.setter
+    def age(self, value):
+        if value in range(1, 101):
+            self.__age = value
         else:
-            return "не существует"
+            print('Wrong age')
 
-    def info(self):
-        print(f"Треугольник со сторонами ({self.__a}, {self.__b}, {self.__c}) {self.existence()}")
+    @age.deleter:
+        def age(self):
+            del self.__age
+
+    def __str__(self):
+        # return f'Name: {self.name}'
+        return 'Class ' + self.__class__.__name__
 
 
-t1 = Point3d(2.2, 5, 6)
-t2 = Point3d(5, 2, 8)
-t3 = Point3d(7, 3, 6)
+class Employee(Person):
 
-# t1.info()
-# t2.info()
-# t3.info()
+    def __init__(self, name, age, company):
+        super().__init__(name, age)
+        self.company = company
+
+    def more_info(self):
+        print(f'{self.name} works in {self.company}')
+
+    def print_info(self):
+        super().print_info()
+        print(f'Work: {self.company}')
+
+
+
+person = Person('Katy', 30)
+person.age = 35
+person.print_info()
+print(person)
+
+
+employee = Employee('Nick', 30, 'Google')
+employee.print_info()
+employee.more_info()
+print(employee)

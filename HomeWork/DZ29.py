@@ -42,4 +42,3 @@ t3 = Triangle(7, 3, 6)
 t1.info()
 t2.info()
 t3.info()
-
