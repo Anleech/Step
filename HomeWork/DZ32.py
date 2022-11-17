@@ -1,99 +1,95 @@
 import json
 
+data = {}
 
-class Country:
-    def __init__(self, file_name):
-        self.file_name = file_name
-        self.country_list = {}
-        self.exit = True
 
-    @staticmethod
-    def print_command_list():
-        print(f"Выбор действия:\n1 - добавление данных\n2 - удаление данных\n3 - поиск данных\n"
-              f"4 - редактированние данных\n5 - сохранение данных\n6 - просмотр данных\n7 - Загрузка данных\n"
-              f"для выхода введите любое отсутствующее значение")
-        print()
+class CountryCapital:
+    def __init__(self, country, capital):
+        self.country = country
+        self.capital = capital
+        data[self.country] = self.capital
 
-    @staticmethod
-    def get_command():
-        return int(input("Ввод команды - "))
+    def __str__(self):
+        return f'{self.country}: {self.capital}'
 
-    def add_string(self):
-        country_name = str(input("Введите название страны - "))
-        country_capital = str(input("Введите столицу - "))
-        if self.find_country(country_name):
-            print("Введите другое значение")
-        else:
-            self.country_list[country_name] = country_capital
-            print("Запись добавлена")
-
-    def del_string(self, count_name):
-        temp = self.country_list.pop(count_name, None)
-        if temp is None:
-            print("Нет такой страны")
-
-    def change_string(self, count_name):
-        if self.find_country(count_name):
-            print(self.country_list[count_name])
-            print("Введите новые значения:")
-            self.del_string(count_name)
-            self.add_string()
-        else:
-            print("Такой страны нет")
-
-    def find_country(self, country_name):
-        if self.country_list.get(country_name) is None:
-            print("Такой страны нет")
-            return False
-        else:
-            print("Страна присутствует в списке")
-            return True
-
-    def write_json(self, person_dict):
+    @classmethod
+    def remove_dict(cls, old_value, new_value, filename):
         try:
-            data = json.load(open(self.file_name))
-            data.update(person_dict)
-            with open(self.file_name, "w") as fil:
-                json.dump(person_dict, fil, indent=2)
+            data1 = json.load(open(filename))
         except FileNotFoundError:
-            with open(self.file_name, "w") as fil:
-                json.dump(person_dict, fil, indent=2)
+            data1 = {}
 
-    def load_json(self):
+        data1[old_value] = new_value
+        with open(filename, 'w') as f:
+            json.dump(data1, f, indent=3, ensure_ascii=False)
+
+    @classmethod
+    def search_data(cls, country, filename):
         try:
-            data = json.load(open(self.file_name))
-            self.country_list.update(data)
+            data1 = json.load(open(filename))
         except FileNotFoundError:
-            print("Файл отсутствует")
+            data1 = {}
 
-
-    def print_country(self):
-        print("*"*30)
-        for i, j in self.country_list.items():
-            print(f"{i} - {j}")
-        print("*" * 30)
-
-    def work_command(self, command):
-        if command == 1:
-            self.add_string()
-        elif command == 2:
-            self.del_string(str(input("Введита название удаляемой страны - ")))
-        elif command == 3:
-            self.find_country(str(input("Введита название искомой страны - ")))
-        elif command == 4:
-            self.change_string(str(input("Введита название изменяемой страны - ")))
-        elif command == 5:
-            self.write_json(self.country_list)
-        elif command == 6:
-            self.print_country()
-        elif command == 7:
-            self.load_json()
+        if country in data1:
+            print(f'Страна {country} столица {data1[country]} есть  в словаре!')
         else:
-            print("Нет такой команды")
-            self.exit = False
+            print(f'Страны {country} нет  в словаре!')
+
+    @classmethod
+    def add_country(cls, new_country, new_capital, filename, ):
+        try:
+            data1 = json.load(open(filename))
+        except FileNotFoundError:
+            data1 = {}
+        data1[new_country] = new_capital
+
+        with open(filename, 'w') as f:
+            json.dump(data1, f, indent=3, ensure_ascii=False)
+
+    @classmethod
+    def delete_country(cls, del_country, filename, ):
+        try:
+            data1 = json.load(open(filename))
+        except FileNotFoundError:
+            data1 = {}
+        del data1[del_country]
+
+        with open(filename, 'w') as f:
+            json.dump(data1, f, indent=3, ensure_ascii=False)
+
+    @classmethod
+    def load_from_file(cls, filename):
+        with open(filename, 'r') as f:
+            print(json.load(f))
 
 
-new_contry = Country("country.json")
-while new_contry.exit:
-    new_contry.print_command_list()
-    new_contry.work_command(Country.get_command())
+index = ''
+while index != 6:
+    try:
+        index = int(input('Выбор действия:\n1 - добавление данных\n2 - удаление данных\n3 - поиск данных\n'
+                          '4 - редактирование данных\n5 - просмотр данных\n6 - Завершение работы\nВвод: '))
+        if index == 1:
+            country_name = input('Введите название страны(с заглавной буквы):')
+            capital_name = input('Введите название столицы страны(с заглавной буквы):')
+            CountryCapital.add_country(country_name, capital_name, 'list_capital.json')
+            print('Файл сохранен')
+
+        if index == 2:
+            country_name = input('Введите страну для удаления(с заглавной буквы):')
+            CountryCapital.delete_country(country_name, 'list_capital.json')
+            print('Файл сохранен')
+
+        if index == 3:
+            country_name = input('Введите название страны(с заглавной буквы):')
+            CountryCapital.search_data(country_name, 'list_capital.json')
+
+        if index == 4:
+            country_name = input('Введите страну для корректировки: ')
+            new_capital = input('Введите новое название столицы: ')
+            CountryCapital.remove_dict(country_name, new_capital, 'list_capital.json')
+            print('Файл сохранен')
+
+        if index == 5:
+            CountryCapital.load_from_file('list_capital.json')
+    except:
+        break
