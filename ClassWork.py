@@ -1,80 +1,54 @@
-import json
+import csv
 
-class Student:
-    def __init__(self, name, marks):
-        self.name = name
-        self.marks = marks
+# with open("data.csv") as r_file:
+#     file_reader = csv.reader(r_file, delimiter=";")
+#     count = 0
+#     for row in file_reader:
+#         # print(row)
+#         if count == 0:
+#             print(f"Файл содержит: {', '.join(row)}")
+#         else:
+#             print(f"    {row[0]} - {row[1]}. Родился в {row[2]} году")
+#         count += 1
+#     print(f"Всего в файле {count} строки")
 
-    def __str__(self):
-        a = ''
-        for i in self.marks:
-            a += str(i) + ", "
-        return f"Студент: {self.name} {a[:-2]}"
+# with open("data.csv") as r_file:
+#     field_names = ['Имя',  'Профессия',  'Год рождения']
+#     file_reader = csv.DictReader(r_file, delimiter=";", fieldnames=field_names)
+#     count = 0
+#     for row in file_reader:
+#         if count == 0:
+#             print(f"Файл содержит: {', '.join(row)}")
+#         print(f"{row['Имя']} - {row['Профессия']}. Родился в {row['Год рождения']} году")
+#         count += 1
 
-    def add_mark(self, mark):
-        self.marks.append(mark)
-
-    def delete_mark(self, index):
-        self.marks.pop(index)
-
-    def edit_mark(self, index, new_mark):
-        self.marks[index] = new_mark
-
-    def average_mark(self):
-        return round(sum(self.marks) / len(self.marks), 2)
-
-    @classmethod
-    def dump_to_json(cls, stud, filename):
-        try:
-            data = json.load(open(filename))
-        except FileNotFoundError:
-            data = []
-
-        data = {'name': stud.name, 'marks': stud.marks}
-        with open(filename, 'w') as f:
-            json.dump(data, f, indent=2)
+# with open('student.csv', 'w') as f:
+#     writer = csv.writer(f, delimiter=';', lineterminator='\r')
+#     writer.writerow(["Имя", "Класс", "Возраст"])
+#     writer.writerow(["Женя", "9", "15"])
+#     writer.writerow(["Саша", "5", "12"])
+#     writer.writerow(["Маша", "11", "18"])
 
 
-class Group:
-    def __init__(self, students, group):
-        self.students = students
-        self.group = group
-
-    def __str__(self):
-        a = ''
-        for i in self.students:
-            a += str(i) + "\n"
-        return f"Группа: {self.group}\n{a}"
-
-    def add_student(self, student):
-        self.students.append(student)
-
-    def remove_student(self, index):
-        return self.students.pop(index)
-
-    @classmethod
-    def change_group(cls, group1, group2, index):
-        return group2.add_student(group1.remove_student(index))
-
-
-st1 = Student('Bodnya', [5, 4, 3, 4, 5, 3])
-st2 = Student('Nikolaenko', [2, 3, 5, 4, 2])
-st3 = Student('Birukov', [3, 5, 3, 2, 5, 4])
-sts = [st1, st2]
-
-Student.dump_to_json(st1, 'student.json')
-Student.dump_to_json(st2, 'student.json')
-# my_group = Group(sts, "ГК Python")
-# print(my_group)
-# my_group.add_student(st3)
-# print(my_group)
-# my_group.remove_student(1)
-# print(my_group)
+# data = [['hostname', 'vendor', 'model', 'location'],
+#         ['sw1', 'Cisco', '3750', 'London, Best str'],
+#         ['sw2', 'Cisco', '3850', 'Liverpool, Better str'],
+#         ['sw3', 'Cisco', '3650', 'Liverpool, Better str'],
+#         ['sw4', 'Cisco', '3650', 'London, Best str']]
 #
-# group22 = [st2]
-# my_group2 = Group(group22, "ГК Web")
-# print(my_group2)
+# with open('data_new.csv', 'w') as f:
+#     writer = csv.writer(f, delimiter=',', lineterminator='\r', quoting=csv.QUOTE_NONNUMERIC)
+#     # for row in data:
+#     #     writer.writerow(row)
+#     writer.writerows(data)
 #
-# Group.change_group(my_group, my_group2, 0)
-# print(my_group)
-# print(my_group2)
+# with open('data_new.csv') as f:
+#     print(f.read())
+
+with open('student1.csv', 'w') as f:
+    names = ["Имя", "Возраст"]
+    file_writer = csv.DictWriter(f, delimiter=";", lineterminator='\r',fieldnames=names)
+    file_writer.writeheader()
+    file_writer.writerow(["Женя", "9", "15"])
+    file_writer.writerow(["Саша", "5", "12"])
+    file_writer.writerow(["Маша", "11", "18"]

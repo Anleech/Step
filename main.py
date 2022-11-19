@@ -1,131 +1,97 @@
-class Account:
-    rate_usd = 0.013
-    rate_eur = 0.011
-    suffix = 'RUB'
-    suffix1 = 'EUR'
-    suffix2 = 'USD'
+import json
 
-    def __init__(self, num, surname, percent, value=0):
-        self.__num = num
-        self.__surname = surname
-        self.__percent = percent
-        self.__value = value
-        print(f'Счёт #{self.__num} принадлежит {self.__surname} был открыт.')
-        print('*' * 50)
+data = {}
 
-    def get_num(self):
-        return self.__num
 
-    def set_num(self, n):
-        self.__num = n
+class CountryCapital:
+    def __init__(self, country, capital):
+        self.country = country
+        self.capital = capital
+        data[self.country] = 'encyclopedia.json'
 
-    def get_surname(self):
-        return self.__surname
-
-    def set_surname(self, s):
-        self.__surname = s
-
-    def get_percent(self):
-        return self.__percent
-
-    def set_percent(self, p):
-        self.__percent = p
-
-    def get_value(self):
-        return self.__value
-
-    def set_value(self, v):
-        self.__value = v
-
-    def __del__(self):
-        print('*' * 50)
-        print(f'Счёт #{self.__num} был закрыт.')
+    def __str__(self):
+        return f'{self.country}: {self.capital}'
 
     @classmethod
-    def set_usd_rate(cls, rate):
-        cls.rate_usd = rate
+    def edit_country(cls, old_value, new_value, filename):
+        try:
+            data_new = json.load(open(filename))
+        except FileNotFoundError:
+            data_new = {}
+
+        data_new[old_value] = new_value
+        with open(filename, 'w') as f:
+            json.dump(data_new, f, indent=3)
 
     @classmethod
-    def set_eur_rate(cls, rate):
-        cls.rate_eur = rate
+    def search_country(cls, country, filename):
+        try:
+            data_new = json.load(open(filename))
+        except FileNotFoundError:
+            data_new = {}
 
-    @staticmethod
-    def convert(value, rate):
-        return value * rate
-
-
-
-    def convert_to_usd(self):
-        usd_val = Account.convert(self.__value, Account.rate_usd)
-        print(f'Состояние счёта долларах: {usd_val} {Account.suffix2}')
-
-    def convert_to_eur(self):
-        eur_val = Account.convert(self.__value, Account.rate_eur)
-        print(f'Состояние счёта в евро: {eur_val} {Account.suffix1}')
-
-    def print_balance(self):
-        print(f'Текущий баланс {self.__value} {Account.suffix}')
-
-    def print_info(self):
-        print(f'Инф о счёте')
-        print('-' * 20)
-        print(f'#{self.__num}')
-        print(f'Владелец {self.__surname}')
-        self.print_balance()
-        print(f'Проценты: {self.__percent:.0%}')
-        print('-' * 20)
-
-    def add_percents(self):
-        self.__value += self.__value * self.__percent
-        print('Проценты начислены')
-        self.print_balance()
-
-    def withdraw_money(self, val):
-        if val > self.__value:
-            print(f'К сожалению Вы не можете снять {val} RUB')
+        if country in data_new:
+            print(f'Страна {country} столица {data_new[country]}')
         else:
-            self.__value -= val
-            print(f'{val} RUB было успешно снято')
-            self.print_balance()
-    def add_money(self, val):
+            print(f'Страны {country} нет')
 
-        self.__value += val
-        print(f'{val} RUB было добавлено')
+    @classmethod
+    def set_country(cls, new_country, new_capital, filename, ):
+        try:
+            data_new = json.load(open(filename))
+        except FileNotFoundError:
+            data_new = {}
+        data_new[new_country] = new_capital
+
+        with open(filename, 'w') as f:
+            json.dump(data_new, f, indent=3)
+
+    @classmethod
+    def dell_country(cls, del_country, filename, ):
+        try:
+            data_new = json.load(open(filename))
+        except FileNotFoundError:
+            data_new = {}
+        del data_new[del_country]
+
+        with open(filename, 'w') as f:
+            json.dump(data_new, f, indent=3)
+
+    @classmethod
+    def load_file(cls, filename):
+        with open(filename, 'r') as f:
+            print(json.load(f))
 
 
-acc = Account('12345', 'Долгих', 0.03, 1000)
-acc.print_info()
+index = 0
+while index != 6:
+    try:
+        index = int(input('Выбор действия:\n1 - добавление данных\n2 - удаление данных\n3 - поиск данных\n'
+                          '4 - редактирование данных\n5 - просмотр данных\n6 - Завершение работы\nВвод: '))
+        if index == 1:
+            country_name = input('Введите название страны(с заглавной буквы):')
+            capital_name = input('Введите название столицы страны(с заглавной буквы):')
+            CountryCapital.set_country(country_name, capital_name, 'encyclopedia.json')
+            print('Файл сохранен')
 
-acc.set_num(16789)
-print(acc.get_num())
+        if index == 2:
+            country_name = input('Введите страну для удаления(с заглавной буквы):')
+            CountryCapital.dell_country(country_name, 'encyclopedia.json')
+            print('Файл сохранен')
 
-acc.set_surname('Алехин')
-print(acc.get_surname())
+        if index == 3:
+            country_name = input('Введите название страны(с заглавной буквы):')
+            CountryCapital.search_country(country_name, 'encyclopedia.json')
 
-acc.set_percent(0.04)
-print(acc.get_percent())
+        if index == 4:
+            country_name = input('Введите страну для корректировки: ')
+            new_capital = input('Введите новое название столицы: ')
+            CountryCapital.edit_country(country_name, new_capital, 'encyclopedia.json')
+            print('Файл сохранен')
 
-acc.set_value(2000)
-print(acc.get_value())
-
-acc.print_info()
-# print(acc.__dict__)
-
-acc.convert_to_usd()
-acc.convert_to_eur()
-
-Account.set_eur_rate(3)
-acc.convert_to_eur()
-
-Account.set_usd_rate(5)
-acc.convert_to_usd()
-
-acc.add_percents()
-
-acc.withdraw_money(3000)
-
-acc.add_money(5000)
-
-acc.withdraw_money(3000)
-
-acc.withdraw_money(1000)
+        if index == 5:
+            CountryCapital.load_file('encyclopedia.json')
+    except:
+        break
+else:
+    print('Работа завершена')
