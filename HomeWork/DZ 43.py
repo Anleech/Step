@@ -12,4 +12,3 @@ with sq.connect("goods.db") as con:
     )""")
 
     cur.executemany("INSERT INTO goods VALUES(NULL,?,?)", data)
-    
