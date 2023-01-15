@@ -21,5 +21,5 @@ class Product(Base):
         self.storage = storage
 
     def __repr__(self):
-        return f"Товар(Название:{self.product_name}, Цена: {self.price}, Количество: {self.amount}" \
+        return f"Товар(Название: {self.product_name}, Цена: {self.price}, Количество: {self.amount}, " \
                f"Номер склада: {self.storage})"

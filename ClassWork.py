@@ -1,56 +1,99 @@
-import pickle
-import os.path
+from jinja2 import Template
+
+# name = "Игорь"
+# age = 28
+#
+# per = {'name': "Игорь", 'age': 28}
+#
+# tm = Template("Мне {{ p.age }} лет и меня зовут {{ p.name }}")
+# msg = tm.render(p=per)
+#
+# print(msg)
+
+#
+# class Person:
+#     def __init__(self, name, age):
+#         self.__name = name
+#         self.__age = age
+#
+#     def get_name(self):
+#         return self.__name
+#
+#     def get_age(self):
+#         return self.__age
+#
+# per = Person("Игорь", 28)
+#
+# tm = Template("Мне {{ p.get_age() }} лет и меня зовут {{ p.get_name() }}")
+# msg = tm.render(p=per)
+#
+# print(msg)
 
 
-class Article:
-    def __init__(self, title, ganr, producer, year, duration, studio, actors):
-        self.title = title
-        self.ganr = ganr
-        self.producer = producer
-        self.year = year
-        self.duration = duration
-        self.studio = studio
-        self.actors = actors
+# data = """"{% raw %}Модуль Jinja вместо
+# определения {{name}}
+# подставит соответствующее значение {% endraw %}
+# """
+#
+# tm = Template(data)
+# msg = tm.render(name="Игорь")
+#
+# print(msg)
 
-    def __str__(self):
-        return f"{self.title} - жанр ({self.ganr}) - режиссер ({self.producer})"
+# link = """
+# В HTML-Документе определяется так:
+# <a href="#">Ссылка</a>
+# """
+#
+# tm = Template("{{ link | e }}")
+# msg = tm.render(link=link)
+#
+# print(msg)
+
+# cities = [
+#     {'id':1, 'city': 'Мосвка'},
+#     {'id':2, 'city': 'Сочи'},
+#     {'id':3, 'city': 'Смоленск'},
+#     {'id':4, 'city': 'Минск'},
+#     {'id':5, 'city': 'Ярославль'}
+# ]
+#
+# link = """
+# <select name="cities">
+# {% for c in cities -%}
+#     <option value="{{ c['id'] }}">{{  c['city'] }}</option>
+# {% endfor -%}
+# </select>
+# """
+#
+# tm = Template(link)
+# msg = tm.render(cities=cities)
+#
+# print(msg)
 
 
-class ArticleModel:
-    def __init__(self):
-        self.db_name = 'move_catalog.txt'
-        self.articles = self.load_data()  # {}
+# persons = [
+#     {'name':'Алексей', 'year': 18, 'weight': 75},
+#     {'name':'Никита', 'year': 28, 'weight': 78.7},
+#     {'name':'Виталий', 'year': 35, 'weight': 99},
+#     ]
+#
+# tpl = """
+# {%- for u in user -%}
+#     {% filter upper %} {{ u.name }} {% endfilter %} {% filter string %} {{ u.year }} - {{ u.weight }} {% endfilter %}
+# """
+#
+# tm = Template(tpl)
+# msg = tm.render(user=persons)
+#
+# print(msg)
 
-    def add_article(self, dict_article):
-        article = Article(*dict_article.values())
-        self.articles[article.title] = article
 
-    def get_all_articles(self):
-        return self.articles.values()
+html = """
 
-    def get_singe_article(self, user_title):
-        article = self.articles[user_title]
-        dict_article = {
-            "название": article.title,
-            "жанр": article.ganr,
-            "режиссер": article.producer,
-            "год выпуска": article.year,
-            "длительность": article.duration,
-            "студия": article.studio,
-            "актеры": article.actors
-        }
-        return dict_article
+"""
 
-    def remove_article(self, user_title):
-        return self.articles.pop(user_title)
+tm = Template(html)
+msg = tm.render(user=persons)
 
-    def load_data(self):
-        if os.path.exists(self.db_name):
-            with open(self.db_name, 'rb') as f:
-                return pickle.load(f)
-        else:
-            return dict()
-
-    def save_data(self):
-        with open(self.db_name, 'wb') as f:
-            pickle.dump(self.articles, f)
+print(msg)
