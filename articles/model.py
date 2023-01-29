@@ -16,7 +16,7 @@ class Article:
 class ArticleModel:
     def __init__(self):
         self.db_name = 'db.txt'
-        self.articles = self.load_data()
+        self.articles = self.load_data()  # {}
 
     def add_article(self, dict_article):
         article = Article(*dict_article.values())
@@ -48,4 +48,3 @@ class ArticleModel:
     def save_data(self):
         with open(self.db_name, 'wb') as f:
             pickle.dump(self.articles, f)
-

@@ -13,3 +13,4 @@ class Group(Base):
 
     def __repr__(self):
         return f"Группа (ID: {self.id}, Название: {self.group_name})"
+

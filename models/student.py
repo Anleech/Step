@@ -23,3 +23,6 @@ class Student(Base):
     def __repr__(self):
         return f"Студент (ФИО: {self.surname} {self.name} {self.patronymic}, Возраст: {self.age}, ID группы: " \
                f"{self.group})"
+
+
+

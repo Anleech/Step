@@ -16,3 +16,4 @@ class Lesson(Base):
 
     def __repr__(self):
         return f"Предмет (ID: {self.id}, Название: {self.lesson_title})"
+

@@ -1,7 +1,8 @@
 def index():
-    with open("templates/index.html") as template:
+    with open("templates/index.html", encoding="utf-8") as template:
         return template.read()
 
+
 def blog():
-    with open("templates/blog.html") as blog:
+    with open("templates/blog.html", encoding="utf-8") as template:
         return template.read()

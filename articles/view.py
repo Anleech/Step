@@ -60,3 +60,4 @@ class UserInterface:
     @add_title("Сообщение об ошибке")
     def show_incorrect_answer_error(self, answer):
         print(f"Варианта {answer} не существует")
+
