@@ -1,0 +1,16 @@
+body{
+    background: white;
+    display: flex;
+}
+.menu{
+    background: #373e47;
+    list-style: none;
+}
+.top-bar{
+    background: #eaeaea;
+    height: 50px;
+}
+.page{
+    background: #475363;
+    margin: 0;
+}
