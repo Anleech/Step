@@ -1,16 +1,23 @@
 body{
-    background: white;
-    display: flex;
+    background: #eaeaea;
+    margin: 0;
+    padding: 0;
 }
 .menu{
-    background: #373e47;
+    background: lightslategrey;
     list-style: none;
-}
-.top-bar{
-    background: #eaeaea;
-    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 0;
 }
 .page{
-    background: #475363;
-    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.title{
+    text-align: center;
 }
