@@ -10,5 +10,17 @@
 
 {% block content %}
 {{ super() }}
-Содержимое страницы
+
+<hr>
+<h2>Список постов</h2>
+<ul>
+    {% for p in posts %}
+    <li>
+        <p class="title">
+            <a href="{{ url_for('show_post', alias=p.url) }}">{{p.title}}</a>
+        </p>
+        <div class="annonce">{{p.text[:300]}}...</div>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

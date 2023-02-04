@@ -1,7 +1,7 @@
 import sqlite3
 import os
-from flask import Flask, render_template, url_for, request, flash, get_flashed_messages
-
+from flask import Flask, render_template, url_for, request, flash, session, redirect, abort, g
+from FDataBase import FDataBase
 
 DATABASE = '/tmp/flsk.db'
 DEBUG = True
@@ -38,40 +38,94 @@ menu = [
 ]
 
 
+def get_db():
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
 @app.route("/home")
 @app.route("/")
 def home():
-    return render_template("home.html", title="Главная", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("home.html", title="Главная", menu=dbase.get_menu())
 
 
 @app.route("/works")
 def works():
-    return render_template("works.html", title="Мои проекты", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("works.html", title="Мои проекты", menu=dbase.get_menu())
 
 
 @app.route("/skills")
 def skills():
-    return render_template("skills.html", title="Технологии", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("skills.html", title="Технологии", menu=dbase.get_menu())
+
+
+@app.route("/add_post", methods=["POST", "GET"])
+def add_post():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == "POST":
+        if len(request.form['name']) > 4 and len(request.form['post']) > 10:
+            res = dbase.add_post(request.form['name'], request.form['post'], request.form['url'])
+            if not res:
+                flash("Ошибка добавления поста", category="error")
+            else:
+                flash("Пост добавлен успешно", category="success")
+        else:
+            flash("Ошибка добавления поста", category="error")
+
+    return render_template('add_post.html', menu=dbase.get_menu(), title="Добавление поста")
+
+
+@app.route("/post/<alias>")
+def show_post(alias):
+    db = get_db()
+    dbase = FDataBase(db)
+    title, post, url = dbase.get_post(alias)
+    if not title:
+        abort(404)
+
+    return render_template('post.html', menu=dbase.get_menu(), title=title, post=post)
+
 
 
 @app.route("/blog")
 def blog():
-    return render_template("blog.html", title="Блог", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("blog.html", title="Блог", menu=dbase.get_menu(), posts=dbase.get_posts_anonce())
 
 
 @app.route("/contact", methods=["POST", "GET"])
 def contact():
+    db = get_db()
+    dbase = FDataBase(db)
     if request.method == "POST":
         if len(request.form['message']) >= 10:
             flash('Сообщение отправлено!', category='success')
         else:
             flash('Сообщение не отправлено.Минимальная длинна должна быть 10 символов', category='error')
-    return render_template("contact.html", title="Контакты", menu=menu)
+    return render_template("contact.html", title="Контакты", menu=dbase.get_menu())
 
 
 @app.errorhandler(404)
-def page_nat_found(error):
-    return render_template("page404.html", title="Страница не найденна", menu=menu)
+def page_not_found(error):
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("page404.html", title="Страница не найдена", menu=dbase.get_menu())
+
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
