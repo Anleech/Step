@@ -10,5 +10,32 @@
 
 {% block content %}
 {{ super() }}
-Содержимое страницы
+<hr>
+<h2>Список курсов</h2>
+
+<div class="curses">
+
+    {% for w in works %}
+
+        <div class="work">
+            <li>
+
+            <p class="title">
+                <a href="{{ url_for('show_work', alias=w.url) }}">{{w.title[:30]}}</a>
+            </p>
+
+            <div class="btn_cont">
+                <h1>{{w.price}} руб.</h1>
+                {{w.text[:150]}}...
+                <button type="submit" onClick="location.href='{{ url_for('show_work', alias=w.url) }}'">Купить</button>
+            </div>
+            </li>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+
 {% endblock %}

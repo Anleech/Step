@@ -56,7 +56,42 @@ def home():
 def works():
     db = get_db()
     dbase = FDataBase(db)
-    return render_template("works.html", title="Мои проекты", menu=dbase.get_menu())
+    return render_template("works.html", title="Курсы", menu=dbase.get_menu(), works=dbase.get_works_anonce())
+
+@app.route("/add_work", methods=["POST", "GET"])
+def add_work():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == "POST":
+        if len(request.form['name']) < 30 and len(request.form['work']) > 10 and len(request.form['price']) > 0:
+            res = dbase.add_work(request.form['name'], request.form['work'], request.form['url'], request.form['price'])
+            if not res:
+                flash("Ошибка добавления работы", category="error")
+            else:
+                flash("Работа добавлен успешно", category="success")
+        else:
+            flash("Ошибка добавления работы", category="error")
+
+    return render_template('add_work.html', menu=dbase.get_menu(), title="Добавление работы")
+
+
+@app.route("/work/<alias>")
+def show_work(alias):
+    db = get_db()
+    dbase = FDataBase(db)
+    title, work, url, price = dbase.get_work(alias)
+    if not title:
+        abort(404)
+
+    return render_template('work.html', menu=dbase.get_menu(), title=title, work=work, url=url, price=price)
+
+
+
+
+
+
+
+
 
 
 @app.route("/skills")
